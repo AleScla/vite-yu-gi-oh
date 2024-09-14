@@ -13,6 +13,9 @@ export default {
   methods:{
     changeCards(){
       this.$emit('changeCards')
+    },
+    resetValue(){
+      this.$emit('resetValue')
     }
   }
 }
@@ -24,8 +27,10 @@ export default {
   <div class="container">
     <!-- 3) Utilizzo del componente -->
     <section class="card-section text-start ">
+      <button @click="resetValue">RESET</button>
       <select @change="changeCards()" v-model="store.selectValue" class="my-2">
-        <option v-for="(archetype, index) in store.allArchetypes" :key="index" :value="archetype.archetype_name" selected>{{ archetype.archetype_name }}</option>
+        
+        <option v-for="(archetype, index) in store.allArchetypes" :key="index" :value="archetype.archetype_name">{{ archetype.archetype_name }}</option>
       </select>
       <div class="container cards-container p-5">
         <div class="row">

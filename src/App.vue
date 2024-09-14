@@ -48,7 +48,10 @@ export default {
           }
           console.log('archetipi', this.store.allArchetypes)
       })
-      
+    },
+    resetPage(){
+      this.store.selectValue = [];
+      this.filterAPI()
     }
 
   }}
@@ -56,7 +59,7 @@ export default {
 
 <template>
  <AppHeader />
- <AppMain :cardsFound="store.allCards.length" :cards="store.allCards" @changeCards="filterAPI()"/>
+ <AppMain :cardsFound="store.allCards.length" :cards="store.allCards" @resetValue="resetPage()" @changeCards="filterAPI()"/>
 </template>
 
 <style lang="scss">
