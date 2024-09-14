@@ -1,26 +1,31 @@
 <script>
+import {store} from '../store.js';
 export default {
   data(){
     return{
-
+      store
     }
   },
   props:{
     cardsFound: Number,
     cards: Array,
+  },
+  methods:{
+    changeCards(){
+      this.$emit('changeCards')
+    }
   }
 }
 </script>
+
 
 <template>
  <main class="bg-warning">
   <div class="container">
     <!-- 3) Utilizzo del componente -->
-    
     <section class="card-section text-start ">
-      <select name="type" class="my-2">
-        <option value="Alien">Alien</option>
-        <option value="BO">BO</option>
+      <select @change="changeCards()" v-model="store.selectValue" class="my-2">
+        <option v-for="(archetype, index) in store.allArchetypes" :key="index" :value="archetype.archetype_name" selected>{{ archetype.archetype_name }}</option>
       </select>
       <div class="container cards-container p-5">
         <div class="row">

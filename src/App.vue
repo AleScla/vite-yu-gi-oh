@@ -1,36 +1,62 @@
 <script>
 import AppHeader from './components/AppHeader.vue';
 import AppMain from './components/AppMain.vue';
-import axios from 'axios'
+import axios from 'axios';
+import {store} from './store.js'
 
 export default {
   
   data() {
     return { 
-      allCards:[]
+      store
     }
   },
   created() {
-    axios.get('https://db.ygoprodeck.com/api/v7/cardinfo.php?num=20&offset=0')
-    .then((res)=>{
-      console.log(res.data)
-      this.allCards = res.data.data;
-      console.log('a', res.data.data)
-      console.log(this.allCards)
-    })
+    this.filterAPI()
+    this.archetypeAPI()
   },
   // 2) Dichiarazione del componente
   components: {
     AppHeader,
     AppMain,
   },
-}
+  methods:{
+    filterAPI(){
+      axios.get('https://db.ygoprodeck.com/api/v7/cardinfo.php?num=20&offset=0',
+          {
+            params:{
+              archetype: this.store.selectValue
+            }
+          })
+          .then((res)=>{
+            console.log(res.data)
+            this.store.allCards = res.data.data;
+            console.log(this.store.selectValue)
+            
+          })
+          .catch((err) =>{
+            this.store.selectValue = [];
+          })
+    },
+    archetypeAPI(){
+      axios.get('https://db.ygoprodeck.com/api/v7/archetypes.php')
+        .then((res) =>{
+          console.log(res.data)
+          for (let i = 0; i < 100; i++){
+            let singleData = res.data[i];
+            this.store.allArchetypes.push(singleData)
+          }
+          console.log('archetipi', this.store.allArchetypes)
+      })
+      
+    }
+
+  }}
 </script>
 
 <template>
  <AppHeader />
- <AppMain :cardsFound="allCards.length" :cards="allCards"/>
-
+ <AppMain :cardsFound="store.allCards.length" :cards="store.allCards" @changeCards="filterAPI()"/>
 </template>
 
 <style lang="scss">
